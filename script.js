@@ -87,10 +87,34 @@ document.addEventListener('DOMContentLoaded', () => {
     ];
 
     const levels = [
-        { name: 'Legendary Hero', min: 1000000, icon: 'images/levels/level4.png' },
-        { name: 'VIP Status', min: 500000, icon: 'images/levels/level3.png' },
-        { name: 'Front Row Seat', min: 100000, icon: 'images/levels/level2.png' },
-        { name: 'Club Member', min: 0, icon: 'images/levels/level1.png' }
+        {
+            name: 'Legendary Hero',
+            min: 1000000,
+            icon: 'images/levels/level4.png',
+            description: 'Dejas un legado histórico. Te conviertes en un pilar del colegio. Gracias a héroes como tú, podemos completar nuestras metas y asegurar la formación de toda una generación.',
+            range: '$1.000.000 COP en adelante'
+        },
+        {
+            name: 'VIP Status',
+            min: 500000,
+            icon: 'images/levels/level3.png',
+            description: 'Eres parte fundamental del equipo. Tu donación impulsa significativamente la construcción del nuevo confesionario y la urna para San José.',
+            range: '$500.000 - $999.000 COP'
+        },
+        {
+            name: 'Front Row Seat',
+            min: 100000,
+            icon: 'images/levels/level2.png',
+            description: 'Estás en primera fila. Tu generosidad nos permite avanzar más rápido.',
+            range: '$100.000 - $499.000 COP'
+        },
+        {
+            name: 'Club Member',
+            min: 0,
+            icon: 'images/levels/level1.png',
+            description: 'Es la semilla para nuestros sueños. ¡Bienvenido al club!',
+            range: 'Hasta $99.000 COP'
+        }
     ];
 
     fetch('donors.json')
@@ -114,8 +138,6 @@ document.addEventListener('DOMContentLoaded', () => {
         if (statsElement) {
             statsElement.innerHTML = `
                 <span class="stat-item"><strong>${donors.length}</strong> Donantes</span>
-                <span class="stat-divider">|</span>
-                <span class="stat-item">Promedio: <strong>$${Math.round(total / donors.length).toLocaleString()}</strong></span>
             `;
         }
     }
@@ -166,14 +188,17 @@ document.addEventListener('DOMContentLoaded', () => {
                 <div class="objective-content">
                     <div class="objective-header">
                         <span class="objective-title">${obj.name} ${isCompleted ? '<span class="completed-badge">✓ Meta Cumplida</span>' : ''}</span>
-                        <span class="objective-cost">$${obj.cost.toLocaleString()} COP</span>
                     </div>
                     <p>${obj.description}</p>
                     ${obj.impact ? `<p class="impact-text"><strong>Impacto:</strong> ${obj.impact}</p>` : ''}
+                    
+                    <div class="progress-info-header">
+                        <span class="current-amount">$${objDonated.toLocaleString('es-CO')}</span>
+                        <span class="goal-info">${percentage.toFixed(0)}% de la meta de $${obj.cost.toLocaleString('es-CO')}</span>
+                    </div>
                     <div class="progress-container">
                         <div class="progress-bar ${isCompleted ? 'gold-glow' : ''}" data-width="${percentage}%"></div>
                     </div>
-                    <p class="progress-text">Consignado: $${objDonated.toLocaleString()} COP (${percentage.toFixed(1)}%)</p>
                 </div>
             `;
             container.appendChild(div);
@@ -198,21 +223,60 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function renderDonors(donors) {
-        const grid = document.getElementById('donors-grid');
-        donors.sort((a, b) => b.amount - a.amount);
+        const container = document.getElementById('donors-grid');
+        container.innerHTML = ''; // Clear existing content
+        container.classList.remove('donors-grid'); // Remove grid class as we want full-width rows
+        container.classList.add('hall-of-fame');
 
-        donors.forEach(d => {
-            const level = levels.find(l => d.amount >= l.min);
-            const card = document.createElement('div');
-            card.classList.add('donor-card');
+        // Sort levels ascending (Club Member first)
+        const sortedLevels = [...levels].sort((a, b) => a.min - b.min);
 
-            card.innerHTML = `
-                <img src="${level.icon}" alt="${level.name}" class="donor-badge">
-                <p class="donor-name">${d.donor}</p>
-                <p class="donor-level">${level.name}</p>
+        sortedLevels.forEach(level => {
+            // Find donors for this level
+            // A donor belongs to this level if their amount is >= level.min AND < the next higher level's min (if any)
+            // But simplify: we can just check if it matches the level lookup
+            const levelDonors = donors.filter(d => {
+                const assignedLevel = levels.find(l => d.amount >= l.min); // uses the original ordered levels array which assumes order matters or logic matters
+                // To be safe, let's just re-calculate the level for each donor using the same logic as before
+                // The original find() works because arrays are searched in order. 
+                // Wait, the original levels array was:
+                // Legendary (1M), VIP (500k), Front (100k), Club (0)
+                // So find() returns the first match.
+                return assignedLevel.name === level.name;
+            });
+
+            // REMOVED CHECK: if (levelDonors.length === 0) return; 
+
+            const levelDiv = document.createElement('div');
+            levelDiv.classList.add('hall-of-fame-level');
+
+            // Change join from ', ' to '' and use div + class for styling
+            const donorNames = levelDonors.length > 0
+                ? levelDonors.map(d => `<div class="donor-name-item">${obfuscateName(d.donor)}</div>`).join('')
+                : '<div class="no-donors-msg">Aún no hay héroes aquí. ¡Sé el primero!</div>';
+
+            levelDiv.innerHTML = `
+                <div class="level-image-container">
+                    <img src="${level.icon}" alt="${level.name}" class="level-image">
+                </div>
+                <div class="level-content">
+                    <h3 class="level-title">${level.name}</h3>
+                    <p class="level-range">${level.range}</p>
+                    <p class="level-description">${level.description}</p>
+                    <div class="donor-list">
+                        ${donorNames}
+                    </div>
+                </div>
             `;
-            grid.appendChild(card);
+            container.appendChild(levelDiv);
         });
+    }
+
+    function obfuscateName(fullName) {
+        return fullName.split(' ').map(word => {
+            if (word.length <= 2) return word;
+            return word.substring(0, 2) + '*'.repeat(Math.min(3, word.length - 2));
+        }).join(' ');
     }
 
     function setupScrollAnimations() {

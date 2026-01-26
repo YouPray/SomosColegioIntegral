@@ -97,6 +97,15 @@ h2::after {
     animation: fadeInUp 0.8s ease forwards 0.2s;
 }
 
+.text-gradient {
+    background: linear-gradient(135deg, var(--accent-color), var(--white));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    display: inline-block;
+    /* Helps with gradient rendering/clipping sometimes */
+}
+
 .hero .subtitle {
     font-size: clamp(1.1rem, 3vw, 1.8rem);
     margin-bottom: 4rem;
@@ -123,8 +132,12 @@ h2::after {
     border: 1px solid var(--glass-border);
     padding: 2.5rem 4rem;
     border-radius: var(--radius-lg);
-    margin-bottom: 4rem;
-    display: inline-block;
+    margin-bottom: 3rem;
+    display: table;
+    /* Acts like inline-block but forces new line context if we add margin auto? No, table is not right. Let's use fit-content + block behavior via margin */
+    width: fit-content;
+    margin-left: auto;
+    margin-right: auto;
     box-shadow: var(--shadow-lg);
     animation: float 6s ease-in-out infinite;
 }
@@ -159,6 +172,7 @@ h2::after {
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     margin-bottom: 0.5rem;
+    font-family: 'Montserrat', sans-serif;
 }
 
 .donation-stats {
@@ -198,7 +212,7 @@ h2::after {
 }
 
 /* History Section */
-.history {
+.invitation {
     background: var(--white);
 }
 
@@ -216,14 +230,14 @@ h2::after {
     display: block;
 }
 
-.history-content {
+.invitation-content {
     max-width: 800px;
     margin: 0 auto;
     font-size: 1.1rem;
 }
 
-.history-content p {
-    margin-bottom: 1.5rem;
+.invitation-content p {
+    margin-bottom: 1.2rem;
 }
 
 /* Gallery / Carousel */
@@ -406,6 +420,7 @@ h2::after {
     display: flex;
     align-items: center;
     gap: 1rem;
+    font-family: 'Montserrat', sans-serif;
 }
 
 .completed-badge {
@@ -438,23 +453,49 @@ h2::after {
     font-size: 1rem;
     color: var(--secondary-color);
     font-weight: 400;
+    margin-bottom: 1.5rem;
+}
+
+.progress-info-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: 0.5rem;
+    margin-top: 1rem;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.current-amount {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--primary-color);
+    line-height: 1;
+}
+
+.goal-info {
+    font-size: 0.9rem;
+    color: var(--text-light);
+    font-weight: 500;
 }
 
 .progress-container {
-    height: 14px;
-    background: #e2e8f0;
-    border-radius: 10px;
+    height: 12px;
+    background: #e5e7eb;
+    /* Light gray background */
+    border-radius: 50px;
     overflow: hidden;
-    margin: 2rem 0;
-    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.05);
+    margin: 0;
+    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.05);
 }
 
 .progress-bar {
     height: 100%;
-    background: linear-gradient(90deg, var(--secondary-color), var(--accent-color));
+    background: #fbbf24;
+    /* Yellow color */
     width: 0;
     transition: width 2s cubic-bezier(0.34, 1.56, 0.64, 1);
     position: relative;
+    border-radius: 50px;
 }
 
 .progress-bar.gold-glow {
@@ -499,53 +540,105 @@ h2::after {
 }
 
 /* Donors Section */
-.donors-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 1.5rem;
+/* Hall of Fame */
+.hall-of-fame {
+    display: flex;
+    flex-direction: column;
+    gap: 3rem;
     margin-top: 3rem;
 }
 
-.donor-card {
+.hall-of-fame-level {
+    display: flex;
+    gap: 2rem;
+    align-items: flex-start;
     background: var(--white);
-    padding: 2rem;
-    border-radius: var(--radius-md);
-    text-align: center;
+    padding: 2.5rem;
+    border-radius: var(--radius-lg);
     box-shadow: var(--shadow-md);
     transition: var(--transition);
-    border: 1px solid transparent;
 }
 
-.donor-card:hover {
-    transform: translateY(-8px) scale(1.02);
+.hall-of-fame-level:hover {
+    transform: translateY(-5px);
     box-shadow: var(--shadow-lg);
-    border-color: var(--secondary-color);
 }
 
-.donor-badge {
-    width: 64px;
-    height: 64px;
-    margin-bottom: 1.5rem;
-    transition: transform 0.3s ease;
+.level-image-container {
+    flex: 0 0 120px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
-.donor-card:hover .donor-badge {
-    transform: rotate(10deg);
+.level-image {
+    width: 120px;
+    height: 120px;
+    object-fit: contain;
+    /* Removed drop-shadow per request */
 }
 
-.donor-name {
-    font-weight: 700;
+.level-content {
+    flex: 1;
+}
+
+.level-title {
+    font-size: 1.5rem;
     color: var(--primary-color);
-    margin-bottom: 0.5rem;
-    font-size: 1.1rem;
+    margin-bottom: 0.25rem;
+    font-weight: 800;
+    font-family: 'Montserrat', sans-serif;
 }
 
-.donor-level {
-    font-size: 0.85rem;
-    color: var(--text-light);
+.level-range {
+    font-size: 0.9rem;
+    color: var(--accent-dark);
+    font-weight: 700;
+    margin-bottom: 0.75rem;
     text-transform: uppercase;
     letter-spacing: 0.05em;
-    font-weight: 600;
+}
+
+.level-description {
+    color: var(--text-light);
+    font-style: italic;
+    margin-bottom: 1.5rem;
+    font-size: 0.95rem;
+}
+
+.donor-list {
+    font-size: 1.1rem;
+    color: var(--text-color);
+    line-height: 1.8;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.donor-name-item {
+    padding-bottom: 0.25rem;
+    border-bottom: 1px dashed #e2e8f0;
+}
+
+.donor-name-item:last-child {
+    border-bottom: none;
+}
+
+.no-donors-msg {
+    color: var(--text-light);
+    font-style: italic;
+    font-size: 0.9rem;
+}
+
+@media (max-width: 768px) {
+    .hall-of-fame-level {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .level-image-container {
+        margin: 0 auto;
+    }
 }
 
 /* How to Donate */
@@ -565,6 +658,17 @@ h2::after {
     padding: 3rem;
     border-radius: 20px;
     backdrop-filter: blur(5px);
+}
+
+.donation-info a {
+    color: var(--white);
+    font-weight: 700;
+    text-decoration: underline;
+    transition: var(--transition);
+}
+
+.donation-info a:hover {
+    color: var(--accent-color);
 }
 
 .account-details {
