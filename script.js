@@ -1,21 +1,19 @@
 document.addEventListener('DOMContentLoaded', () => {
     // 1. Photo Carousel Logic
     const photoFiles = [
-        '539562148_122151059798755527_4517419949007981657_n.jpg',
-        '548759526_18420569848128603_914077316555818580_n.jpg',
-        '549205954_18420569740128603_4149615417702794010_n.jpg',
-        '585113940_122166428870755527_6523186199500761605_n.jpg',
-        'EDp3zNzXUAUZLKr (1).jpg',
-        'Fiesta.jpg',
-        'IMG_20230201_084800-scaled.jpg',
-        'IMG_20230201_091900-scaled.jpg',
-        'IMG_5907-1.jpg',
-        'WhatsApp Image 2026-01-21 at 2.40.22 PM.jpeg',
-        'WhatsApp Image 2026-01-21 at 2.40.23 PM (1).jpeg',
-        'WhatsApp Image 2026-01-21 at 2.40.23 PM (3).jpeg',
-        'WhatsApp Image 2026-01-21 at 2.40.23 PM (4).jpeg',
-        'WhatsApp-Image-2022-11-29-at-11.32.43-AM-1.jpeg',
-        'WhatsApp-Image-2023-02-01-at-11.33.48-AM-2.jpeg'
+        'colegio_integral_soacha_baile.jpg',
+        'colegio_integral_soacha_ejercicio_teatro.jpg',
+        'colegio_integral_soacha_excelencia.jpg',
+        'colegio_integral_soacha_grados_capilla.jpeg',
+        'colegio_integral_soacha_jardin.jpeg',
+        'colegio_integral_soacha_letrero.jpeg',
+        'colegio_integral_soacha_llanerito.jpg',
+        'colegio_integral_soacha_ninas_biblioteca.jpg',
+        'colegio_integral_soacha_oratorio_capilla.jpeg',
+        'colegio_integral_soacha_primeras_comuniones.jpg',
+        'colegio_integral_soacha_recreo.jpg',
+        'colegio_integral_soacha_retablo.jpeg',
+        'colegio_integral_soacha_virgen_maria_jardin.jpeg'
     ];
 
     const track = document.querySelector('.carousel-track');
@@ -27,7 +25,7 @@ document.addEventListener('DOMContentLoaded', () => {
     photoFiles.forEach((file, index) => {
         const slide = document.createElement('li');
         slide.classList.add('carousel-slide');
-        slide.innerHTML = `<img src="Fotos/${file}" alt="School Photo ${index + 1}">`;
+        slide.innerHTML = `<img src="images/carousel/${file}" alt="School Photo ${index + 1}">`;
         track.appendChild(slide);
 
         const dot = document.createElement('button');
@@ -82,17 +80,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // 2. Donation Data and Progress Bars
     const objectives = [
-        { name: 'Formar corazones', cost: 8000000, description: 'Dotación completa de los libros "Aprender a Amar" para todas las estudiantes.', impact: 'Cada $30.000 cubren el material de una niña.' },
-        { name: 'Nuevo confesionario', cost: 6000000, description: 'Construcción de un nuevo confesionario para el oratorio.' },
-        { name: 'Nuevo ambón', cost: 2000000, description: 'Adquisición de un nuevo ambón para el oratorio.' },
-        { name: 'El Sueño de San José', cost: 4000000, description: 'Una urna especial para nuestra hermosa imagen de San José Dormido.' }
+        { name: 'Formar corazones', cost: 8000000, description: 'Dotación completa de los libros "Aprender a Amar" para todas las estudiantes.', impact: 'Cada $30.000 cubren el material de una niña.', image: 'images/project1.jpg' },
+        { name: 'Nuevo confesionario', cost: 6000000, description: 'Construcción de un nuevo confesionario para el oratorio.', image: 'images/proyect2.jpg' },
+        { name: 'Nuevo ambón', cost: 2000000, description: 'Adquisición de un nuevo ambón para el oratorio.', image: 'images/project3.png' },
+        { name: 'El Sueño de San José', cost: 4000000, description: 'Una urna especial para nuestra hermosa imagen de San José Dormido.', image: 'images/project4.png' }
     ];
 
     const levels = [
-        { name: 'Legendary Hero', min: 1000000, icon: 'levels/level4.png' },
-        { name: 'VIP Status', min: 500000, icon: 'levels/level3.png' },
-        { name: 'Front Row Seat', min: 100000, icon: 'levels/level2.png' },
-        { name: 'Club Member', min: 0, icon: 'levels/level1.png' }
+        { name: 'Legendary Hero', min: 1000000, icon: 'images/levels/level4.png' },
+        { name: 'VIP Status', min: 500000, icon: 'images/levels/level3.png' },
+        { name: 'Front Row Seat', min: 100000, icon: 'images/levels/level2.png' },
+        { name: 'Club Member', min: 0, icon: 'images/levels/level1.png' }
     ];
 
     fetch('donors.json')
@@ -107,9 +105,18 @@ document.addEventListener('DOMContentLoaded', () => {
     function updateTotalDonated(donors) {
         const total = donors.reduce((sum, d) => sum + d.amount, 0);
         const totalElement = document.getElementById('total-amount');
+        const statsElement = document.getElementById('donation-stats');
+
         if (totalElement) {
-            // Animate number counting up (optional but premium)
             animateNumber(totalElement, total);
+        }
+
+        if (statsElement) {
+            statsElement.innerHTML = `
+                <span class="stat-item"><strong>${donors.length}</strong> Donantes</span>
+                <span class="stat-divider">|</span>
+                <span class="stat-item">Promedio: <strong>$${Math.round(total / donors.length).toLocaleString()}</strong></span>
+            `;
         }
     }
 
@@ -146,19 +153,28 @@ document.addEventListener('DOMContentLoaded', () => {
             let percentage = (objDonated / obj.cost) * 100;
             remainingDonated = Math.max(0, remainingDonated - obj.cost);
 
+            const isCompleted = percentage >= 100;
+
             const div = document.createElement('div');
             div.classList.add('objective-item');
+            if (isCompleted) div.classList.add('completed');
+
             div.innerHTML = `
-                <div class="objective-header">
-                    <span class="objective-title">${obj.name}</span>
-                    <span class="objective-cost">$${obj.cost.toLocaleString()} COP</span>
+                <div class="objective-image">
+                    <img src="${obj.image}" alt="${obj.name}">
                 </div>
-                <p>${obj.description}</p>
-                ${obj.impact ? `<p class="impact-text"><strong>Impacto:</strong> ${obj.impact}</p>` : ''}
-                <div class="progress-container">
-                    <div class="progress-bar" data-width="${percentage}%"></div>
+                <div class="objective-content">
+                    <div class="objective-header">
+                        <span class="objective-title">${obj.name} ${isCompleted ? '<span class="completed-badge">✓ Meta Cumplida</span>' : ''}</span>
+                        <span class="objective-cost">$${obj.cost.toLocaleString()} COP</span>
+                    </div>
+                    <p>${obj.description}</p>
+                    ${obj.impact ? `<p class="impact-text"><strong>Impacto:</strong> ${obj.impact}</p>` : ''}
+                    <div class="progress-container">
+                        <div class="progress-bar ${isCompleted ? 'gold-glow' : ''}" data-width="${percentage}%"></div>
+                    </div>
+                    <p class="progress-text">Consignado: $${objDonated.toLocaleString()} COP (${percentage.toFixed(1)}%)</p>
                 </div>
-                <p class="progress-text">Consignado: $${objDonated.toLocaleString()} COP (${percentage.toFixed(1)}%)</p>
             `;
             container.appendChild(div);
         });
