@@ -80,10 +80,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // 2. Donation Data and Progress Bars
     const objectives = [
-        { name: 'Formar corazones', cost: 8000000, description: 'Dotación completa de los libros "Aprender a Amar" para todas las estudiantes.', impact: 'Cada $30.000 cubren el material de una niña.', image: 'images/project1.jpg' },
-        { name: 'Nuevo confesionario', cost: 6000000, description: 'Construcción de un nuevo confesionario para el oratorio.', image: 'images/proyect2.jpg' },
-        { name: 'Nuevo ambón', cost: 2000000, description: 'Adquisición de un nuevo ambón para el oratorio.', image: 'images/project3.png' },
-        { name: 'El Sueño de San José', cost: 4000000, description: 'Una urna especial para nuestra hermosa imagen de San José Dormido.', image: 'images/project4.png' }
+        { name: 'Formar corazones', cost: 8000000, description: 'Dotación completa de los libros "Aprender a Amar" para todas las estudiantes.', impact: 'Cada $30.000 cubren el material de una niña.', image: 'images/projects/project1.jpg' },
+        { name: 'Nuevo confesionario', cost: 6000000, description: 'Construcción de un nuevo confesionario para el oratorio.', image: 'images/projects/project2.jpg' },
+        { name: 'Nuevo ambón', cost: 2000000, description: 'Adquisición de un nuevo ambón para el oratorio.', image: 'images/projects/project3.png' },
+        { name: 'El Sueño de San José', cost: 4000000, description: 'Una urna especial para nuestra hermosa imagen de San José Dormido.', image: 'images/projects/project4.png' }
     ];
 
     const levels = [
