@@ -80,10 +80,31 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // 2. Donation Data and Progress Bars
     const objectives = [
-        { name: 'Formar corazones', cost: 8000000, description: 'Dotación completa de los libros "Aprender a Amar" para todas las estudiantes.', impact: 'Cada $30.000 cubren el material de una niña.', image: 'images/projects/project1.jpg' },
-        { name: 'Nuevo confesionario', cost: 6000000, description: 'Construcción de un nuevo confesionario para el oratorio.', image: 'images/projects/project2.jpg' },
-        { name: 'Nuevo ambón', cost: 2000000, description: 'Adquisición de un nuevo ambón para el oratorio.', image: 'images/projects/project3.png' },
-        { name: 'El Sueño de San José', cost: 4000000, description: 'Una urna especial para nuestra hermosa imagen de San José Dormido.', image: 'images/projects/project4.png' }
+        {
+            name: 'Formar corazones',
+            cost: 8000000,
+            description: 'Dotación completa de los libros "Aprender a Amar" para todas las estudiantes.',
+            impact: 'Cada $30.000 cubren el material de una niña.',
+            images: ['images/projects/project1a.jpg', 'images/projects/project1b.jpg']
+        },
+        {
+            name: 'Nuevo confesionario',
+            cost: 6000000,
+            description: 'Construcción de un nuevo confesionario para el oratorio.',
+            images: ['images/projects/project2a.jpg', 'images/projects/project2b.jpg']
+        },
+        {
+            name: 'Nuevo ambón',
+            cost: 2000000,
+            description: 'Adquisición de un nuevo ambón para el oratorio.',
+            images: ['images/projects/project3a.jpg', 'images/projects/project3b.jpg']
+        },
+        {
+            name: 'El Sueño de San José',
+            cost: 4000000,
+            description: 'Una urna especial para nuestra hermosa imagen de San José Dormido.',
+            images: ['images/projects/project4a.jpg', 'images/projects/project4b.jpg']
+        }
     ];
 
     const levels = [
@@ -129,16 +150,10 @@ document.addEventListener('DOMContentLoaded', () => {
     function updateTotalDonated(donors) {
         const total = donors.reduce((sum, d) => sum + d.amount, 0);
         const totalElement = document.getElementById('total-amount');
-        const statsElement = document.getElementById('donation-stats');
+        // Removed donation-stats element logic
 
         if (totalElement) {
             animateNumber(totalElement, total);
-        }
-
-        if (statsElement) {
-            statsElement.innerHTML = `
-                <span class="stat-item"><strong>${donors.length}</strong> Donantes</span>
-            `;
         }
     }
 
@@ -170,7 +185,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         let remainingDonated = totalDonated;
 
-        objectives.forEach(obj => {
+        objectives.forEach((obj, index) => {
             let objDonated = Math.min(remainingDonated, obj.cost);
             let percentage = (objDonated / obj.cost) * 100;
             remainingDonated = Math.max(0, remainingDonated - obj.cost);
@@ -181,9 +196,14 @@ document.addEventListener('DOMContentLoaded', () => {
             div.classList.add('objective-item');
             if (isCompleted) div.classList.add('completed');
 
+            // Construct carousel HTML
+            const imagesHtml = obj.images.map((imgSrc, imgIndex) =>
+                `<img src="${imgSrc}" alt="${obj.name}" class="mini-carousel-img ${imgIndex === 0 ? 'active' : ''}">`
+            ).join('');
+
             div.innerHTML = `
-                <div class="objective-image">
-                    <img src="${obj.image}" alt="${obj.name}">
+                <div class="objective-image mini-carousel" id="mini-carousel-${index}">
+                    ${imagesHtml}
                 </div>
                 <div class="objective-content">
                     <div class="objective-header">
@@ -202,6 +222,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 </div>
             `;
             container.appendChild(div);
+
+            // Start mini-carousel cycle
+            startMiniCarousel(index, obj.images.length);
         });
 
         // Setup observer for progress bars
@@ -220,6 +243,19 @@ document.addEventListener('DOMContentLoaded', () => {
         container.querySelectorAll('.objective-item').forEach(item => {
             progressObserver.observe(item);
         });
+    }
+
+    function startMiniCarousel(id, count) {
+        const carousel = document.getElementById(`mini-carousel-${id}`);
+        if (!carousel) return;
+        const images = carousel.querySelectorAll('.mini-carousel-img');
+        let currentIndex = 0;
+
+        setInterval(() => {
+            images[currentIndex].classList.remove('active');
+            currentIndex = (currentIndex + 1) % count;
+            images[currentIndex].classList.add('active');
+        }, 4000); // Change image every 4 seconds
     }
 
     function renderDonors(donors) {
@@ -279,7 +315,31 @@ document.addEventListener('DOMContentLoaded', () => {
         }).join(' ');
     }
 
+    function setupFloatingButton() {
+        const btn = document.getElementById('floating-donate-btn');
+        const hero = document.querySelector('.hero');
+        const donarSection = document.getElementById('donar');
+        const footer = document.querySelector('footer');
+
+        if (!btn || !hero || !donarSection) return;
+
+        window.addEventListener('scroll', () => {
+            const scrollY = window.scrollY;
+            const heroBottom = hero.offsetTop + hero.offsetHeight;
+            const donarTop = donarSection.offsetTop;
+
+            // Show button if we passed the hero but haven't reached the donar section
+            // Ideally slightly before donar section so it doesn't overlap
+            if (scrollY > heroBottom && scrollY < (donarTop - window.innerHeight + 200)) {
+                btn.classList.add('visible');
+            } else {
+                btn.classList.remove('visible');
+            }
+        });
+    }
+
     function setupScrollAnimations() {
+        setupFloatingButton(); // Call it here
         const revealObserver = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
