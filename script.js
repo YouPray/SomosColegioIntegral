@@ -1,12 +1,14 @@
 document.addEventListener('DOMContentLoaded', () => {
     // 1. Photo Carousel Logic
     const photoFiles = [
+        'Leonor_Puyana_de_Bermudez.jpg',
         'colegio_integral_soacha_baile.jpg',
         'colegio_integral_soacha_ejercicio_teatro.jpg',
         'colegio_integral_soacha_excelencia.jpg',
         'colegio_integral_soacha_grados_capilla.jpeg',
         'colegio_integral_soacha_jardin.jpeg',
         'colegio_integral_soacha_letrero.jpeg',
+        'colegio_integral_soacha_virgen_maria_nina.jpg',
         'colegio_integral_soacha_llanerito.jpg',
         'colegio_integral_soacha_ninas_biblioteca.jpg',
         'colegio_integral_soacha_oratorio_capilla.jpeg',
@@ -17,66 +19,25 @@ document.addEventListener('DOMContentLoaded', () => {
     ];
 
     const track = document.querySelector('.carousel-track');
+    // Remove buttons and nav dots logic since it's now an infinite scroll
     const nextButton = document.querySelector('.btn-next');
     const prevButton = document.querySelector('.btn-prev');
     const dotsNav = document.querySelector('.carousel-nav');
 
-    // Populate carousel
-    photoFiles.forEach((file, index) => {
+    // Hide controls if they exist (or we can just ignore them, but better to hide)
+    if (nextButton) nextButton.style.display = 'none';
+    if (prevButton) prevButton.style.display = 'none';
+    if (dotsNav) dotsNav.style.display = 'none';
+
+    // Populate carousel (Double the items to ensure smooth infinite scroll validation)
+    const infiniteFiles = [...photoFiles, ...photoFiles];
+
+    infiniteFiles.forEach((file, index) => {
         const slide = document.createElement('li');
         slide.classList.add('carousel-slide');
         slide.innerHTML = `<img src="images/carousel/${file}" alt="School Photo ${index + 1}">`;
         track.appendChild(slide);
-
-        const dot = document.createElement('button');
-        dot.classList.add('carousel-indicator');
-        if (index === 0) dot.classList.add('active');
-        dotsNav.appendChild(dot);
     });
-
-    const slides = Array.from(track.children);
-    const dots = Array.from(dotsNav.children);
-    let currentIndex = 0;
-
-    const updateCarousel = (index) => {
-        track.style.transform = `translateX(-${index * 100}%)`;
-        dots.forEach(dot => dot.classList.remove('active'));
-        dots[index].classList.add('active');
-        currentIndex = index;
-    };
-
-    nextButton.addEventListener('click', () => {
-        const nextIndex = (currentIndex + 1) % slides.length;
-        updateCarousel(nextIndex);
-        resetAutoPlay();
-    });
-
-    prevButton.addEventListener('click', () => {
-        const prevIndex = (currentIndex - 1 + slides.length) % slides.length;
-        updateCarousel(prevIndex);
-        resetAutoPlay();
-    });
-
-    dotsNav.addEventListener('click', e => {
-        const targetDot = e.target.closest('button');
-        if (!targetDot) return;
-        const targetIndex = dots.indexOf(targetDot);
-        updateCarousel(targetIndex);
-    });
-
-    // Auto-play
-    let autoPlayInterval = setInterval(() => {
-        const nextIndex = (currentIndex + 1) % slides.length;
-        updateCarousel(nextIndex);
-    }, 5000);
-
-    function resetAutoPlay() {
-        clearInterval(autoPlayInterval);
-        autoPlayInterval = setInterval(() => {
-            const nextIndex = (currentIndex + 1) % slides.length;
-            updateCarousel(nextIndex);
-        }, 5000);
-    }
 
     // 2. Donation Data and Progress Bars
     const objectives = [
@@ -96,7 +57,7 @@ document.addEventListener('DOMContentLoaded', () => {
         {
             name: 'Nuevo ambón',
             cost: 2000000,
-            description: 'Adquisición de un nuevo ambón para el oratorio.',
+            description: 'Adquisición de un nuevo ambón para el oratorio. El actual lo usaremos como atril para la Sede.',
             images: ['images/projects/project3a.jpg', 'images/projects/project3b.jpg']
         },
         {
@@ -288,7 +249,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             // Change join from ', ' to '' and use div + class for styling
             const donorNames = levelDonors.length > 0
-                ? levelDonors.map(d => `<div class="donor-name-item">${obfuscateName(d.donor)}</div>`).join('')
+                ? `<ul class="donor-list">` + levelDonors.map(d => `<li class="donor-name-item">${obfuscateName(d.donor)}</li>`).join('') + `</ul>`
                 : '<div class="no-donors-msg">Aún no hay héroes aquí. ¡Sé el primero!</div>';
 
             levelDiv.innerHTML = `
@@ -299,9 +260,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     <h3 class="level-title">${level.name}</h3>
                     <p class="level-range">${level.range}</p>
                     <p class="level-description">${level.description}</p>
-                    <div class="donor-list">
-                        ${donorNames}
-                    </div>
+                    ${donorNames}
                 </div>
             `;
             container.appendChild(levelDiv);
