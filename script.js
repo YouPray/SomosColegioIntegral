@@ -50,7 +50,7 @@ document.addEventListener('DOMContentLoaded', () => {
         },
         {
             name: 'Nuevo confesionario',
-            cost: 6000000,
+            cost: 8000000,
             description: 'Construcción de un nuevo confesionario para el oratorio.',
             images: ['images/projects/project2a.jpg', 'images/projects/project2b.jpg']
         },
@@ -247,20 +247,26 @@ document.addEventListener('DOMContentLoaded', () => {
             const levelDiv = document.createElement('div');
             levelDiv.classList.add('hall-of-fame-level');
 
-            // Change join from ', ' to '' and use div + class for styling
-            const donorNames = levelDonors.length > 0
-                ? `<ul class="donor-list">` + levelDonors.map(d => `<li class="donor-name-item">${obfuscateName(d.donor)}</li>`).join('') + `</ul>`
-                : '<div class="no-donors-msg">Aún no hay héroes aquí. ¡Sé el primero!</div>';
+            const donorCount = levelDonors.length;
+            const donorCountHtml = `
+                <div class="donor-count-box">
+                    <span class="count-number">${donorCount}</span>
+                    <span class="count-label">${donorCount === 1 ? 'donante' : 'donantes'}</span>
+                </div>`;
 
             levelDiv.innerHTML = `
                 <div class="level-image-container">
                     <img src="${level.icon}" alt="${level.name}" class="level-image">
                 </div>
                 <div class="level-content">
-                    <h3 class="level-title">${level.name}</h3>
-                    <p class="level-range">${level.range}</p>
-                    <p class="level-description">${level.description}</p>
-                    ${donorNames}
+                    <div class="level-header-row">
+                        <div class="level-title-col">
+                            <h3 class="level-title">${level.name}</h3>
+                            <p class="level-range">${level.range}</p>
+                            <p class="level-description">${level.description}</p>
+                        </div>
+                        ${donorCountHtml}
+                    </div>
                 </div>
             `;
             container.appendChild(levelDiv);
