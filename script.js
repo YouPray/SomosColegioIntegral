@@ -99,14 +99,16 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     ];
 
-    fetch('donors.json')
-        .then(response => response.json())
-        .then(donors => {
-            updateTotalDonated(donors);
-            renderObjectives(donors);
-            renderDonors(donors);
-            setupScrollAnimations();
-        });
+    Promise.all([
+        fetch('donors.json').then(res => res.json()),
+        fetch('expenses.json').then(res => res.json()).catch(() => [])
+    ]).then(([donors, expenses]) => {
+        updateTotalDonated(donors);
+        renderObjectives(donors);
+        renderDonors(donors);
+        renderExpenses(donors, expenses);
+        setupScrollAnimations();
+    });
 
     function updateTotalDonated(donors) {
         const total = donors.reduce((sum, d) => sum + d.amount, 0);
@@ -271,6 +273,48 @@ document.addEventListener('DOMContentLoaded', () => {
             `;
             container.appendChild(levelDiv);
         });
+    }
+
+    function renderExpenses(donors, expenses) {
+        const container = document.getElementById('expenses-container');
+        if (!container) return;
+
+        const totalDonated = donors.reduce((sum, d) => sum + d.amount, 0);
+        const totalExpenses = (expenses || []).reduce((sum, e) => sum + e.amount, 0);
+        const balance = totalDonated - totalExpenses;
+
+        let html = '<div class="expenses-list">';
+        if (expenses && expenses.length > 0) {
+            expenses.forEach(expense => {
+                html += `
+                    <div class="expense-item">
+                        <span class="expense-desc">${expense.item}</span>
+                        <span class="expense-amount">$${expense.amount.toLocaleString('es-CO')}</span>
+                    </div>
+                `;
+            });
+        } else {
+            html += '<p>Aún no hay gastos registrados.</p>';
+        }
+        html += '</div>';
+
+        const balanceClass = balance >= 0 ? 'surplus' : 'deficit';
+        const balanceLabel = balance >= 0 ? 'Superávit' : 'Déficit';
+
+        html += `
+            <div class="expenses-summary">
+                <div class="summary-row total-spent">
+                    <span>Total gastado:</span>
+                    <span class="summary-amount">$${totalExpenses.toLocaleString('es-CO')}</span>
+                </div>
+                <div class="summary-row balance-row ${balanceClass}">
+                    <span>${balanceLabel}:</span>
+                    <span class="summary-amount">$${Math.abs(balance).toLocaleString('es-CO')}</span>
+                </div>
+            </div>
+        `;
+
+        container.innerHTML = html;
     }
 
     function obfuscateName(fullName) {

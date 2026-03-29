@@ -541,14 +541,29 @@ h2::after {
 }
 
 /* Donors Section */
+.donors {
+    background: var(--primary-color);
+    color: var(--white);
+}
+
+.donors h2 {
+    color: var(--white);
+}
+
+.donors > .container > p {
+    color: rgba(255, 255, 255, 0.8);
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
 /* Hall of Fame */
 .hall-of-fame {
     display: flex;
     flex-direction: column;
     margin-top: 3rem;
-    background: var(--white);
+    background: var(--primary-light);
     border-radius: var(--radius-lg);
-    box-shadow: var(--shadow-md);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
     overflow: hidden;
 }
 
@@ -558,7 +573,7 @@ h2::after {
     align-items: flex-start;
     padding: 1.5rem;
     transition: var(--transition);
-    border-bottom: 1px solid #e2e8f0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
 }
 
 .hall-of-fame-level:last-child {
@@ -566,7 +581,7 @@ h2::after {
 }
 
 .hall-of-fame-level:hover {
-    background: #f8fafc;
+    background: rgba(255, 255, 255, 0.03);
 }
 
 .level-image-container {
@@ -588,7 +603,7 @@ h2::after {
 
 .level-title {
     font-size: 1.5rem;
-    color: var(--primary-color);
+    color: var(--white);
     margin-bottom: 0.25rem;
     font-weight: 800;
     font-family: 'Montserrat', sans-serif;
@@ -596,14 +611,14 @@ h2::after {
 
 .level-range {
     font-size: 0.9rem;
-    color: var(--accent-dark);
+    color: var(--accent-color);
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.05em;
 }
 
 .level-description {
-    color: var(--text-light);
+    color: rgba(255, 255, 255, 0.7);
     font-style: italic;
     margin-bottom: 0;
     font-size: 0.95rem;
@@ -625,10 +640,10 @@ h2::after {
     display: flex;
     flex-direction: column;
     align-items: center;
-    background: #f1f5f9;
+    background: rgba(255, 255, 255, 0.05);
     padding: 1rem 1.5rem;
     border-radius: 20px;
-    border: 1px solid #e2e8f0;
+    border: 1px solid rgba(255, 255, 255, 0.1);
     min-width: 120px;
 }
 
@@ -636,7 +651,7 @@ h2::after {
     font-size: 2.5rem;
     font-weight: 800;
     line-height: 1;
-    color: var(--primary-color);
+    color: var(--white);
     font-family: 'Montserrat', sans-serif;
 }
 
@@ -644,7 +659,7 @@ h2::after {
     font-size: 0.85rem;
     text-transform: uppercase;
     font-weight: 700;
-    color: var(--text-light);
+    color: rgba(255, 255, 255, 0.6);
     letter-spacing: 0.05em;
     margin-top: 0.25rem;
 }
@@ -673,6 +688,107 @@ h2::after {
         flex-direction: column;
         align-items: center;
         gap: 0.5rem;
+    }
+}
+
+/* Expenses Section */
+.expenses {
+    background: #e2e8f0;
+}
+
+.expenses-container {
+    max-width: 800px;
+    margin: 0 auto;
+    background: var(--white);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-md);
+    padding: 2.5rem;
+    color: var(--text-color);
+}
+
+.expenses-list {
+    margin-bottom: 2rem;
+}
+
+.expense-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 1rem 0;
+    border-bottom: 1px solid #e2e8f0;
+    font-size: 1.1rem;
+}
+
+.expense-item:last-child {
+    border-bottom: none;
+}
+
+.expense-desc {
+    font-weight: 600;
+}
+
+.expense-amount {
+    font-weight: 800;
+    color: var(--primary-color);
+    font-family: 'Montserrat', sans-serif;
+}
+
+.expenses-summary {
+    background: #f1f5f9;
+    padding: 1.5rem;
+    border-radius: var(--radius-md);
+    border: 1px solid #e2e8f0;
+}
+
+.summary-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.5rem 0;
+    font-size: 1.1rem;
+    font-weight: 700;
+}
+
+.summary-amount {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1.3rem;
+}
+
+.total-spent {
+    color: var(--primary-color);
+    border-bottom: 2px dashed #cbd5e1;
+    padding-bottom: 1rem;
+    margin-bottom: 1rem;
+}
+
+.balance-row.surplus {
+    color: #10b981;
+}
+
+.balance-row.surplus .summary-amount::before {
+    content: '+';
+}
+
+.balance-row.deficit {
+    color: #ef4444;
+}
+
+.balance-row.deficit .summary-amount::before {
+    content: '-';
+}
+
+@media (max-width: 768px) {
+    .expenses-container {
+        padding: 1.5rem;
+    }
+    
+    .expense-item, .summary-row {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5rem;
+    }
+    
+    .expense-amount, .summary-amount {
+        align-self: flex-start;
     }
 }
 
