@@ -299,7 +299,7 @@ document.addEventListener('DOMContentLoaded', () => {
         html += '</div>';
 
         const balanceClass = balance >= 0 ? 'surplus' : 'deficit';
-        const balanceLabel = balance >= 0 ? 'Superávit' : 'Déficit';
+        const balanceLabel = balance >= 0 ? 'Disponible' : 'Déficit';
 
         html += `
             <div class="expenses-summary">
