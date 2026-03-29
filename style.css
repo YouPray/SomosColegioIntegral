@@ -327,7 +327,7 @@ h2::after {
     background: var(--glass-bg);
     backdrop-filter: blur(8px);
     -webkit-backdrop-filter: blur(8px);
-    padding: 3rem;
+    padding: 2rem;
     border-radius: var(--radius-lg);
     margin-bottom: 2.5rem;
     box-shadow: var(--shadow-md);
@@ -554,7 +554,7 @@ h2::after {
     gap: 2rem;
     align-items: flex-start;
     background: var(--white);
-    padding: 2.5rem;
+    padding: 1.5rem;
     border-radius: var(--radius-lg);
     box-shadow: var(--shadow-md);
     transition: var(--transition);
