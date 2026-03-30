@@ -44,15 +44,15 @@ document.addEventListener('DOMContentLoaded', () => {
         {
             name: 'Formar corazones',
             cost: 8000000,
-            description: 'Dotación completa de los libros "Aprender a Amar" para todas las estudiantes.',
+            description: 'Dotación completa de los libros "Aprender a Amar" para todos los estudiantes.',
             impact: 'Cada $30.000 cubren el material de una niña.',
             images: ['images/projects/project1a.jpg', 'images/projects/project1b.jpg']
         },
         {
-            name: 'Nuevo confesionario',
-            cost: 8000000,
-            description: 'Construcción de un nuevo confesionario para el oratorio.',
-            images: ['images/projects/project2a.jpg', 'images/projects/project2b.jpg']
+            name: 'El Sueño de San José',
+            cost: 4000000,
+            description: 'Una urna especial para nuestra hermosa imagen de San José Dormido, similar a la que tienen en el oratorio de <strong>Aspaen Iragua</strong> (en la foto).',
+            images: ['images/projects/project4a.jpg', 'images/projects/project4b.jpg']
         },
         {
             name: 'Nuevo ambón',
@@ -61,10 +61,10 @@ document.addEventListener('DOMContentLoaded', () => {
             images: ['images/projects/project3a.jpg', 'images/projects/project3b.jpg']
         },
         {
-            name: 'El Sueño de San José',
-            cost: 4000000,
-            description: 'Una urna especial para nuestra hermosa imagen de San José Dormido.',
-            images: ['images/projects/project4a.jpg', 'images/projects/project4b.jpg']
+            name: 'Nuevo confesionario',
+            cost: 8000000,
+            description: 'Construcción de un cómodo confesionario para el oratorio.',
+            images: ['images/projects/project2a.jpg', 'images/projects/project2b.jpg']
         }
     ];
 
@@ -80,7 +80,7 @@ document.addEventListener('DOMContentLoaded', () => {
             name: 'VIP Status',
             min: 500000,
             icon: 'images/levels/level3.png',
-            description: 'Eres parte fundamental del equipo. Tu donación impulsa significativamente la construcción del nuevo confesionario y la urna para San José.',
+            description: 'Eres parte fundamental del equipo. Tu donación impulsa significativamente la construcción de la urna para San José y el nuevo ambón.',
             range: '$500.000 - $999.000 COP'
         },
         {
@@ -303,6 +303,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
         html += `
             <div class="expenses-summary">
+                <div class="summary-row total-raised">
+                    <span>Total recaudado:</span>
+                    <span class="summary-amount">$${totalDonated.toLocaleString('es-CO')}</span>
+                </div>
                 <div class="summary-row total-spent">
                     <span>Total gastado:</span>
                     <span class="summary-amount">$${totalExpenses.toLocaleString('es-CO')}</span>
