@@ -46,31 +46,47 @@ document.addEventListener('DOMContentLoaded', () => {
             cost: 8000000,
             description: 'Dotación completa de los libros <strong>"Aprender a Amar"</strong> para todos los estudiantes.',
             impact: 'Cada $30.000 cubren el material de una niña.',
-            images: ['images/projects/project1a.jpg', 'images/projects/project1b.jpg']
+            images: [
+                { src: 'images/projects/project1a.jpg', caption: 'Material "Aprender a Amar"' },
+                { src: 'images/projects/project1b.jpg', caption: 'Material "Aprender a Amar"' }
+            ]
         },
         {
             name: 'El Sueño de San José',
             cost: 4000000,
-            description: 'Una urna especial para nuestra hermosa imagen de San José Dormido, similar a la que tienen en el oratorio de <strong>Aspaen Iragua</strong> (en la foto).',
-            images: ['images/projects/project4a.jpg', 'images/projects/project4b.jpg']
+            description: 'Una urna especial para nuestra hermosa imagen de San José Dormido, similar a la que tienen en el oratorio de <strong>Aspaen Iragua</strong>.',
+            images: [
+                { src: 'images/projects/project4a.jpg', caption: 'Nuestro San José Dormido' },
+                { src: 'images/projects/project4b.jpg', caption: 'Urna de Aspaen Iragua' }
+            ]
         },
         {
             name: 'Nuevo Televisor para la Biblioteca',
             cost: 2000000,
             description: 'El televisor actual, de apenas 32 pulgadas, es muy pequeño para las necesidades que tenemos. Queremos uno nuevo de unas 60 pulgadas.',
-            images: ['images/projects/tv-old.jpeg', 'images/projects/tv-new.jpeg']
+            images: [
+                { src: 'images/projects/tv-old.jpeg', caption: 'Televisor actual (32")' },
+                { src: 'images/projects/tv-new.jpeg', caption: 'El televisor que soñamos (60")' }
+            ]
         },
         {
             name: 'Renovaciones en la capilla',
             cost: 15000000,
             description: 'Adquisición de un nuevo <strong>ambón</strong> para el oratorio. El actual lo usaremos como atril para la Sede. Construcción de un cómodo <strong>confesionario</strong> para el oratorio. También queremos cambiar los <strong>ornamentos</strong> que están muy gastados y renovar algunos <strong>libros litúrgicos</strong>.',
-            images: ['images/projects/project3a.jpg', 'images/projects/project3b.jpg', 'images/projects/project2a.jpg', 'images/projects/project2b.jpg']
+            images: [
+                { src: 'images/projects/project3a.jpg', caption: 'Ambón actual' },
+                { src: 'images/projects/project3b.jpg', caption: 'Diseño nuevo ambón' },
+                { src: 'images/projects/project2a.jpg', caption: 'Confesionario actual' },
+                { src: 'images/projects/project2b.jpg', caption: 'Diseño confesionario' }
+            ]
         },
         {
             name: 'Actividades formativas fuera del colegio',
             cost: 10000000,
             description: 'Llevar a muchos estudiantes a actividades de formación fuera del colegio como retiros, convivencias y visitas a lugares de interés cultural y espiritual. En la foto una ida a <strong>Monserrate</strong> gracias a la generosidad de algunos benefactores.',
-            images: ['images/projects/project4.jpg']
+            images: [
+                { src: 'images/projects/project4.jpg', caption: 'Visita a Monserrate' }
+            ]
         }
     ];
 
@@ -166,9 +182,12 @@ document.addEventListener('DOMContentLoaded', () => {
             if (isCompleted) div.classList.add('completed');
 
             // Construct carousel HTML
-            const imagesHtml = obj.images.map((imgSrc, imgIndex) =>
-                `<img src="${imgSrc}" alt="${obj.name}" class="mini-carousel-img ${imgIndex === 0 ? 'active' : ''}">`
-            ).join('');
+            const imagesHtml = obj.images.map((img, imgIndex) => `
+                <div class="mini-carousel-slide ${imgIndex === 0 ? 'active' : ''}">
+                    <img src="${img.src}" alt="${obj.name}" class="mini-carousel-img">
+                    <div class="mini-carousel-caption">${img.caption}</div>
+                </div>
+            `).join('');
 
             div.innerHTML = `
                 <div class="objective-image mini-carousel" id="mini-carousel-${index}">
@@ -179,7 +198,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         <span class="objective-title">${obj.name} ${isCompleted ? '<span class="completed-badge">✓ Meta Cumplida</span>' : ''}</span>
                     </div>
                     <p>${obj.description}</p>
-                    ${obj.impact ? `<p class="impact-text"><strong>Impacto:</strong> ${obj.impact}</p>` : ''}
+                    ${obj.impact ? `<p class="impact-text">${obj.impact}</p>` : ''}
                     
                     <div class="progress-info-header">
                         <span class="current-amount">$${objDonated.toLocaleString('es-CO')}</span>
@@ -217,13 +236,13 @@ document.addEventListener('DOMContentLoaded', () => {
     function startMiniCarousel(id, count) {
         const carousel = document.getElementById(`mini-carousel-${id}`);
         if (!carousel) return;
-        const images = carousel.querySelectorAll('.mini-carousel-img');
+        const slides = carousel.querySelectorAll('.mini-carousel-slide');
         let currentIndex = 0;
 
         setInterval(() => {
-            images[currentIndex].classList.remove('active');
+            slides[currentIndex].classList.remove('active');
             currentIndex = (currentIndex + 1) % count;
-            images[currentIndex].classList.add('active');
+            slides[currentIndex].classList.add('active');
         }, 4000); // Change image every 4 seconds
     }
 
