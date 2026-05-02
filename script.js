@@ -44,7 +44,7 @@ document.addEventListener('DOMContentLoaded', () => {
         {
             name: 'Formar corazones',
             cost: 8000000,
-            description: 'Dotación completa de los libros "Aprender a Amar" para todos los estudiantes.',
+            description: 'Dotación completa de los libros <strong>"Aprender a Amar"</strong> para todos los estudiantes.',
             impact: 'Cada $30.000 cubren el material de una niña.',
             images: ['images/projects/project1a.jpg', 'images/projects/project1b.jpg']
         },
@@ -55,16 +55,22 @@ document.addEventListener('DOMContentLoaded', () => {
             images: ['images/projects/project4a.jpg', 'images/projects/project4b.jpg']
         },
         {
-            name: 'Nuevo ambón',
+            name: 'Nuevo Televisor para la Biblioteca',
             cost: 2000000,
-            description: 'Adquisición de un nuevo ambón para el oratorio. El actual lo usaremos como atril para la Sede.',
-            images: ['images/projects/project3a.jpg', 'images/projects/project3b.jpg']
+            description: 'El televisor actual, de apenas 32 pulgadas, es muy pequeño para las necesidades que tenemos. Queremos uno nuevo de unas 60 pulgadas.',
+            images: ['images/projects/tv-old.jpeg', 'images/projects/tv-new.jpeg']
         },
         {
-            name: 'Nuevo confesionario',
-            cost: 8000000,
-            description: 'Construcción de un cómodo confesionario para el oratorio.',
-            images: ['images/projects/project2a.jpg', 'images/projects/project2b.jpg']
+            name: 'Renovaciones en la capilla',
+            cost: 15000000,
+            description: 'Adquisición de un nuevo <strong>ambón</strong> para el oratorio. El actual lo usaremos como atril para la Sede. Construcción de un cómodo <strong>confesionario</strong> para el oratorio. También queremos cambiar los <strong>ornamentos</strong> que están muy gastados y renovar algunos <strong>libros litúrgicos</strong>.',
+            images: ['images/projects/project3a.jpg', 'images/projects/project3b.jpg', 'images/projects/project2a.jpg', 'images/projects/project2b.jpg']
+        },
+        {
+            name: 'Actividades formativas fuera del colegio',
+            cost: 10000000,
+            description: 'Llevar a muchos estudiantes a actividades de formación fuera del colegio como retiros, convivencias y visitas a lugares de interés cultural y espiritual. En la foto una ida a <strong>Monserrate</strong> gracias a la generosidad de algunos benefactores.',
+            images: ['images/projects/project4.jpg']
         }
     ];
 
