@@ -47,5 +47,9 @@
     {
         "donor": "Yésika & la cookie",
         "amount": 120000
+    },
+    {
+        "donor": "Javier Vacca",
+        "amount": 500000
     }
 ]
