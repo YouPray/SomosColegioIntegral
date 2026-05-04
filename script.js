@@ -126,9 +126,10 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     ];
 
+    const cacheBuster = `?t=${new Date().getTime()}`;
     Promise.all([
-        fetch('donors.json').then(res => res.json()),
-        fetch('expenses.json').then(res => res.json()).catch(() => [])
+        fetch(`donors.json${cacheBuster}`).then(res => res.json()),
+        fetch(`expenses.json${cacheBuster}`).then(res => res.json()).catch(() => [])
     ]).then(([donors, expenses]) => {
         updateTotalDonated(donors);
         renderObjectives(donors);
