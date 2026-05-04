@@ -42,6 +42,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // 2. Donation Data and Progress Bars
     const objectives = [
         {
+            id: '1',
             name: 'Formar corazones',
             cost: 8000000,
             description: 'Dotación completa de los libros <strong>"Aprender a Amar"</strong> para todos los estudiantes.',
@@ -52,6 +53,7 @@ document.addEventListener('DOMContentLoaded', () => {
             ]
         },
         {
+            id: '2',
             name: 'El Sueño de San José',
             cost: 4000000,
             description: 'Una urna especial para nuestra hermosa imagen de San José Dormido, similar a la que tienen en el oratorio de <strong>Aspaen Iragua</strong>.',
@@ -61,8 +63,9 @@ document.addEventListener('DOMContentLoaded', () => {
             ]
         },
         {
+            id: '3',
             name: 'Nuevo Televisor para la Biblioteca',
-            cost: 2000000,
+            cost: 1500000,
             description: 'El televisor actual, de apenas 32 pulgadas, es muy pequeño para las necesidades que tenemos. Queremos uno nuevo de unas 60 pulgadas.',
             images: [
                 { src: 'images/projects/tv-old.jpeg', caption: 'Televisor actual (32")' },
@@ -70,6 +73,7 @@ document.addEventListener('DOMContentLoaded', () => {
             ]
         },
         {
+            id: '4',
             name: 'Renovaciones en la capilla',
             cost: 15000000,
             description: 'Adquisición de un nuevo <strong>ambón</strong> para el oratorio. El actual lo usaremos como atril para la Sede. Construcción de un cómodo <strong>confesionario</strong> para el oratorio. También queremos cambiar los <strong>ornamentos</strong> que están muy gastados y renovar algunos <strong>libros litúrgicos</strong>.',
@@ -81,6 +85,7 @@ document.addEventListener('DOMContentLoaded', () => {
             ]
         },
         {
+            id: '5',
             name: 'Actividades formativas fuera del colegio',
             cost: 10000000,
             description: 'Llevar a muchos estudiantes a actividades de formación fuera del colegio como retiros, convivencias y visitas a lugares de interés cultural y espiritual. En la foto una ida a <strong>Monserrate</strong> gracias a la generosidad de algunos benefactores.',
@@ -165,16 +170,31 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function renderObjectives(donors) {
-        let totalDonated = donors.reduce((sum, d) => sum + d.amount, 0);
         const container = document.getElementById('objectives-list');
+        if (!container) return;
+        container.innerHTML = ''; // Clear existing content
 
-        let remainingDonated = totalDonated;
+        // Calculate specific donations per project and total general donations
+        const specificDonations = {};
+        let generalDonations = 0;
+
+        donors.forEach(d => {
+            if (d.projectId) {
+                specificDonations[d.projectId] = (specificDonations[d.projectId] || 0) + d.amount;
+            } else {
+                generalDonations += d.amount;
+            }
+        });
 
         objectives.forEach((obj, index) => {
-            let objDonated = Math.min(remainingDonated, obj.cost);
-            let percentage = (objDonated / obj.cost) * 100;
-            remainingDonated = Math.max(0, remainingDonated - obj.cost);
+            const donatedToThis = specificDonations[obj.id] || 0;
+            const neededFromGeneral = Math.max(0, obj.cost - donatedToThis);
+            const fromGeneral = Math.min(generalDonations, neededFromGeneral);
 
+            const objDonated = donatedToThis + fromGeneral;
+            generalDonations -= fromGeneral;
+
+            const percentage = (objDonated / obj.cost) * 100;
             const isCompleted = percentage >= 100;
 
             const div = document.createElement('div');
@@ -195,17 +215,17 @@ document.addEventListener('DOMContentLoaded', () => {
                 </div>
                 <div class="objective-content">
                     <div class="objective-header">
-                        <span class="objective-title">${obj.name} ${isCompleted ? '<span class="completed-badge">✓ Meta Cumplida</span>' : ''}</span>
+                        <span class="objective-title">${obj.name} ${isCompleted ? '<span class="completed-badge">Meta Cumplida</span>' : ''}</span>
                     </div>
                     <p>${obj.description}</p>
                     ${obj.impact ? `<p class="impact-text">${obj.impact}</p>` : ''}
                     
                     <div class="progress-info-header">
                         <span class="current-amount">$${objDonated.toLocaleString('es-CO')}</span>
-                        <span class="goal-info">${percentage.toFixed(0)}% de la meta de $${obj.cost.toLocaleString('es-CO')}</span>
+                        <span class="goal-info">${Math.min(100, percentage).toFixed(0)}% de la meta de $${obj.cost.toLocaleString('es-CO')}</span>
                     </div>
                     <div class="progress-container">
-                        <div class="progress-bar ${isCompleted ? 'gold-glow' : ''}" data-width="${percentage}%"></div>
+                        <div class="progress-bar ${isCompleted ? 'gold-glow' : ''}" data-width="${Math.min(100, percentage)}%"></div>
                     </div>
                 </div>
             `;

@@ -456,6 +456,10 @@ h2::after {
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.05em;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
 }
 
 .objective-item.completed {
