@@ -51,5 +51,23 @@
     {
         "donor": "Javier Vacca",
         "amount": 500000
+    },
+    {
+        "donor": "Martha de Tovar",
+        "amount": 3000000
+    },
+    {
+        "donor": "Beatriz & Chris",
+        "amount": 60000
+    },
+    {
+        "donor": "Óscar Reyes",
+        "amount": 500000,
+        "projectId": "2"
+    },
+    {
+        "donor": "César Orjuela",
+        "amount": 100000,
+        "projectId": "2"
     }
 ]
